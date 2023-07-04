@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { test } from '../api/test'
+const data = await test()
+console.log(data);
+
 
 const {count,add,multiplyCount}=$(useUser())
 const addClick=()=>{

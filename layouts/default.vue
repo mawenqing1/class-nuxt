@@ -1,15 +1,13 @@
-<template>
-    <div>
-        头部
-        <slot />
-        底部
-    </div>
-</template>
-
 <script setup>
 
 </script>
 
-<style scoped>
+<template>
+  <div>
+    <slot />
+  </div>
+</template>
+
+<style lang='less' scoped>
 
 </style>

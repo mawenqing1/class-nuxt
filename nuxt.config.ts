@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       Components({
-        resolvers: [AntDesignVueResolver()],
+        resolvers: [AntDesignVueResolver({ importStyle: 'less', resolveIcons: true })],
       }),
     ],
     css: {

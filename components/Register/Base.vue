@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+const { changeToFinish } = $(useModel())
 
 </script>
 
@@ -49,7 +50,8 @@
       </div>
 
       <a-form-item>
-        <button type="submit" btn center-text-36 w-300px rounded-full bg="#4d555d" text-white cursor-pointer>
+        <button type="submit" btn center-text-36 w-300px rounded-full bg="#4d555d" text-white cursor-pointer
+          @click="changeToFinish">
           立即注册
         </button>
       </a-form-item>

@@ -12,6 +12,13 @@ export default defineNuxtConfig({
         resolvers: [AntDesignVueResolver()],
       }),
     ],
+    css: {
+      preprocessorOptions: {
+        less: {
+          javascriptEnabled: true,
+        }
+      }
+    }
   },
   unocss: {
     uno: true,

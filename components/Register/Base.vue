@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { message } from 'ant-design-vue'
+import { SEND_CODE } from '~/api/notify'
+import { USER_REGISTER } from '~/api/account'
 
 const { changeToFinish } = $(useModel())
 const { registerForm } = defineProps<{ registerForm: { phone: string, code: string, captcha: string, accept: boolean } }>()
@@ -22,7 +24,7 @@ const resetCaptcha = () => {
 /**
  * 获取短信验证码
  */
-const getCode = () => {
+const getCode = async () => {
   //验证手机号
   if (registerForm.phone) {
     const phoneReg = /^1[3-9][0-9]{9}$/
@@ -40,11 +42,14 @@ const getCode = () => {
     message.error('请输入图形验证码')
     return
   }
-
-
-  countBtn.disabled = true
-  handleCountDown()
-  message.success('验证码已发送，请注意查收')
+  const { code } = await SEND_CODE(registerForm.phone, registerForm.captcha, 'register')
+  if (code === 1) {
+    countBtn.disabled = true
+    handleCountDown()
+    message.success('验证码已发送，请注意查收')
+  } else {
+    resetCaptcha()
+  }
 }
 
 const handleCountDown = () => {
@@ -58,7 +63,7 @@ const handleCountDown = () => {
   }, 1000)
 }
 
-const onFinish = () => {
+const onFinish = async () => {
   if (!registerForm.code) {
     message.error('请输入短信验证码')
     return
@@ -67,10 +72,15 @@ const onFinish = () => {
     message.error('请同意隐私策略')
     return
   }
-  
 
-  changeToFinish()
-  clearInfo()
+  const {code ,data} = await USER_REGISTER({phone: registerForm.phone, code: registerForm.code});
+  if(code === 1) {
+    changeToFinish()
+    clearInfo()
+    sessionStorage.setItem('CLASS_TOKEN', data.token)
+  } else {
+    resetCaptcha()
+  }
 }
 
 const clearInfo = () => {

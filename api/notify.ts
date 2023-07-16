@@ -5,5 +5,5 @@
  * @param captcha 图形验证码
  */
 export const SEND_CODE = async function (phone: string, captcha: string, type: 'register' | 'login') {
-    return await useApi('/notify/v1/sendCode', { method: 'POST', body: { phone, type, captcha } })
+    return await useApi<null>('/notify/v1/sendCode', { method: 'POST', body: { phone, type, captcha } })
 }

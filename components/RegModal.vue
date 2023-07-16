@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 const { registerModel } = $(useModel())
 
+const emit = defineEmits(['cancel'])
+
+const onCancel = () => {
+  registerModel.base = false
+  emit('cancel')
+}
+
 </script>
 
 <template>
@@ -21,7 +28,7 @@ const { registerModel } = $(useModel())
         <div pt-36px px-50px flex="~ col" w-400px relative>
           <div justify-between flex wfull>
             <span text-20px font-600 color="#404040">快速注册</span>
-            <img src="/images/svg/close_icon.svg" class="cursor-pointer select-none w-20px! h-20px!" @click="registerModel.base = false"/>
+            <img src="/images/svg/close_icon.svg" class="cursor-pointer select-none w-20px! h-20px!" @click="onCancel" />
           </div>
           <slot />
         </div>

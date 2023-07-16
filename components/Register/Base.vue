@@ -1,36 +1,121 @@
 <script lang="ts" setup>
+import { message } from 'ant-design-vue'
+
 const { changeToFinish } = $(useModel())
+const { registerForm } = defineProps<{ registerForm: { phone: string, code: string, captcha: string, accept: boolean } }>()
+
+const captchaSrc = ref(`http://127.0.0.1:8081/api/notify/v1/captcha?type=register&time=${Date.now()}`)
+const countBtn = reactive({
+  countDown: 60,
+  disabled: false,
+  timer: null
+})
+
+const resetCaptcha = () => {
+  if (captchaSrc.value.includes('time')) {
+    captchaSrc.value = captchaSrc.value.replace(/time=\d+/, `time=${Date.now()}`)
+  } else {
+    captchaSrc.value = `${captchaSrc.value}&time=${Date.now()}`
+  }
+}
+
+/**
+ * 获取短信验证码
+ */
+const getCode = () => {
+  //验证手机号
+  if (registerForm.phone) {
+    const phoneReg = /^1[3-9][0-9]{9}$/
+    if (!phoneReg.test(registerForm.phone)) {
+      message.error('请输入正确的手机号')
+      return
+    }
+  } else {
+    message.error('请输入手机号')
+    return
+  }
+
+  //验证图形验证码
+  if (!registerForm.captcha) {
+    message.error('请输入图形验证码')
+    return
+  }
+
+
+  countBtn.disabled = true
+  handleCountDown()
+  message.success('验证码已发送，请注意查收')
+}
+
+const handleCountDown = () => {
+  countBtn.timer = setInterval(() => {
+    countBtn.countDown--
+    if (countBtn.countDown <= 0) {
+      clearInterval(countBtn.timer)
+      countBtn.countDown = 60
+      countBtn.disabled = false
+    }
+  }, 1000)
+}
+
+const onFinish = () => {
+  if (!registerForm.code) {
+    message.error('请输入短信验证码')
+    return
+  }
+  if (!registerForm.accept) {
+    message.error('请同意隐私策略')
+    return
+  }
+  
+
+  changeToFinish()
+  clearInfo()
+}
+
+const clearInfo = () => {
+  registerForm.phone = ''
+  registerForm.captcha = ''
+  registerForm.code = ''
+  registerForm.accept = false
+  countBtn.countDown = 60
+  countBtn.disabled = false
+}
+
+onBeforeMount(() => {
+  clearInterval(countBtn.timer)
+})
 
 </script>
 
 <template>
   <div mt-20px>
-    <a-form autocomplete="off" ref="formRef">
+    <a-form autocomplete="off" ref="formRef" :model="registerForm" @finish="onFinish">
       <a-form-item name="reg">
-        <a-input placeholder="请输入手机号" />
+        <a-input placeholder="请输入手机号" v-model:value="registerForm.phone" />
       </a-form-item>
 
       <!-- 图形验证码  -->
       <a-form-item name="regPCaptcha">
         <div flex>
-          <a-input placeholder="请输入图形验证码" autoComplete="false">
+          <a-input placeholder="请输入图形验证码" autoComplete="false" v-model:value="registerForm.captcha">
             <template #suffix>
-              <reload-outlined mr-3px cursor-pointer />
+              <reload-outlined mr-3px cursor-pointer @click="resetCaptcha" />
             </template>
           </a-input>
           <div flex justify-center items-center>
-            <img w-80px h-30px />
+            <img w-80px h-32px :src="captchaSrc" />
           </div>
         </div>
       </a-form-item>
 
       <!-- 手机验证码  -->
       <a-form-item name="regCaptcha">
-        <a-input placeholder="请输入手机号或邮箱验证码">
+        <a-input placeholder="请输入短信验证码" v-model:value="registerForm.code">
           <template #suffix>
             <div>
-              <a-button type="link" size="small" p0>
-                获取验证码
+              <a-button type="link" size="small" p0 :disabled="countBtn.disabled" @click="getCode">
+                {{ countBtn.disabled ? `${countBtn.countDown}s后重新发送` : '获取验证码' }}
               </a-button>
             </div>
           </template>
@@ -40,7 +125,7 @@ const { changeToFinish } = $(useModel())
       <!-- 同意协议  -->
       <div flex items-center justify-between>
         <a-form-item name="accept">
-          <a-checkbox>
+          <a-checkbox v-model:checked="registerForm.accept">
             <div flexc items-center text-13px>
               <div>同意小卿课堂</div>
               <a size="small" type="link" text-13px p0 m0 href="/" color="#169bd5">《隐私策略》</a>
@@ -50,8 +135,7 @@ const { changeToFinish } = $(useModel())
       </div>
 
       <a-form-item>
-        <button type="submit" btn center-text-36 w-300px rounded-full bg="#4d555d" text-white cursor-pointer
-          @click="changeToFinish">
+        <button type="submit" btn center-text-36 w-300px rounded-full bg="#4d555d" text-white cursor-pointer>
           立即注册
         </button>
       </a-form-item>

@@ -1,6 +1,20 @@
 <script setup lang="ts">
 const { registerModel } = $(useModel())
 
+const registerForm = reactive({
+  phone: '',
+  captcha: '',
+  code: '',
+  accept: false,
+})
+
+const onCancel = () => {
+  registerForm.phone = '';
+  registerForm.captcha = '';
+  registerForm.code = '';
+  registerForm.accept = false;
+}
+
 </script>
 
 <template>
@@ -24,8 +38,8 @@ const { registerModel } = $(useModel())
         </div>
       </div>
     </div>
-    <RegModal>
-      <RegisterBase></RegisterBase>
+    <RegModal @cancel="onCancel">
+      <RegisterBase :registerForm="registerForm"></RegisterBase>
     </RegModal>
     <RegisterFinish></RegisterFinish>
   </div>

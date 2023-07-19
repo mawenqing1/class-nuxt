@@ -13,8 +13,9 @@ const _useApi = $fetch.create({
     async onResponse({response}) {
         const data = response._data;
         if (data.code !== 1) {
-            message.error(data.msg)
-        }
+            if (data.code === 270004) return;
+            message.error(data.msg);
+          }
     }
 })
 

@@ -6,3 +6,8 @@ export interface IApiBase<T> {
     msg: string;
     data: T;
 }
+
+export interface IWechat {
+    qrcode: string;
+    ticket: string;
+  }  

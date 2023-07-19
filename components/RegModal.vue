@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-const { registerModel } = $(useModel())
+let { registerModel, wxModel } = $(useModel())
 
 const emit = defineEmits(['cancel'])
 
 const onCancel = () => {
   registerModel.base = false
+  wxModel = false
   emit('cancel')
 }
 

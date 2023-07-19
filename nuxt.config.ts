@@ -19,19 +19,6 @@ export default defineNuxtConfig({
         }
       }
     }
-  },
-  unocss: {
-    uno: true,
-    attributify: true,
-    shortcuts: [{ flexc: 'flex items-center justify-center' }],
-    rules: [
-      [
-        /^fs-(\d+)$/,
-        ([, d]) => ({
-          'font-size': `${d}px`,
-        }),
-      ],
-    ],
-  },
+  }
 });
 

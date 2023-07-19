@@ -10,6 +10,8 @@ export const useModel = defineStore("model", () => {
         finish: false, //注册完成页
     })
 
+    const wxModel = ref(false) //微信登录框
+
     const changeToFinish = () => {
         registerModel.base = false;
         registerModel.finish = true;
@@ -17,6 +19,7 @@ export const useModel = defineStore("model", () => {
 
     return {
         registerModel,
+        wxModel,
         changeToFinish
     }
 });

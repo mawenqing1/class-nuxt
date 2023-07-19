@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { registerModel } = $(useModel())
+const { registerModel, wxModel } = $(useModel())
 
 const registerForm = reactive({
   phone: '',
@@ -39,7 +39,8 @@ const onCancel = () => {
       </div>
     </div>
     <RegModal @cancel="onCancel">
-      <RegisterBase :registerForm="registerForm"></RegisterBase>
+      <WechatCode v-if="wxModel" />
+      <RegisterBase v-else :registerForm="registerForm"></RegisterBase>
     </RegModal>
     <RegisterFinish></RegisterFinish>
   </div>

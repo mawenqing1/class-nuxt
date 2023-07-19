@@ -42,6 +42,7 @@ const watchScanData = async (ticket: string) => {
     switchLoginState(data)
     wxModel = false
     registerModel.base = false
+    message.success('登录成功')
     clearInterval(timer.value)
   }
 

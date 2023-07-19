@@ -9,6 +9,9 @@ const lock = ref(true)
 const qrCode = ref('')
 const timer = ref(null)
 
+/**
+ * 获取登录二维码
+ */
 const getQrCode = async () => {
   if (lock.value) {
     lock.value = false
@@ -16,6 +19,7 @@ const getQrCode = async () => {
       const { code, data } = await GET_QR_CODE()
       if (code === 1) {
         qrCode.value = data.qrcode
+        //轮询检测用户是否扫码
         timer.value = setInterval(() => {
           watchScanData(data.ticket)
         }, 3000)
@@ -28,6 +32,10 @@ const getQrCode = async () => {
 }
 await getQrCode()
 
+/**
+ * 检测用户是否扫码
+ * @param ticket 微信回调返回的ticket
+ */
 const watchScanData = async (ticket: string) => {
   const { code, data } = await WATCH_SCAN(ticket)
   if (code === 1) {

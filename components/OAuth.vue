@@ -1,17 +1,26 @@
 <script setup lang="ts">
+const { type } = defineProps(['type'])
+let { wxModel, loginModel, registerModel } = $(useModel())
 
+const toWechat = () => {
+  wxModel = true
+  if (type === 'login') {
+    loginModel = false
+    registerModel.base = true
+  }
+}
 </script>
 
 <template>
   <div class="oAuthLogin">
-    <img src="/images/wechat_icon.png" w-70px h-70px />
+    <img src="/images/wechat_icon.png" w-70px h-70px @click="toWechat" />
   </div>
 </template>
 
 <style lang="less" scoped>
 .oAuthLogin {
   display: flex;
-  margin-top: 12px;
+  margin-top: 8px;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;

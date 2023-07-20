@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { registerModel, wxModel } = $(useModel())
+let { registerModel, wxModel, loginModel } = $(useModel())
 
 const registerForm = reactive({
   phone: '',
@@ -13,6 +13,10 @@ const onCancel = () => {
   registerForm.captcha = '';
   registerForm.code = '';
   registerForm.accept = false;
+}
+
+const handleLogin = () => {
+  loginModel = true;
 }
 
 </script>
@@ -31,7 +35,7 @@ const onCancel = () => {
       <HeaderSearch />
       <div>
         <div class="login-or-registry" flexc>
-          <span mr-8>登录</span>
+          <span mr-8 @click="handleLogin">登录</span>
           <span class="register" @click="registerModel.base = true">
             注册
           </span>
@@ -44,6 +48,7 @@ const onCancel = () => {
     </RegModal>
     <RegisterFinish></RegisterFinish>
   </div>
+  <Login />
 </template>
 
 <style lang="less" scoped>

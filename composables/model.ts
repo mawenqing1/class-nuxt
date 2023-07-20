@@ -11,6 +11,7 @@ export const useModel = defineStore("model", () => {
     })
 
     const wxModel = ref(false) //微信登录框
+    const loginModel = ref(false) //登录弹窗
 
     const changeToFinish = () => {
         registerModel.base = false;
@@ -20,6 +21,7 @@ export const useModel = defineStore("model", () => {
     return {
         registerModel,
         wxModel,
+        loginModel,
         changeToFinish
     }
 });

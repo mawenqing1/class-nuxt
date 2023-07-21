@@ -2,6 +2,9 @@
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     'Bottom': typeof import("../components/Bottom.vue")['default']
+    'Forget': typeof import("../components/Forget.vue")['default']
+    'ForgetFirst': typeof import("../components/Forget/First.vue")['default']
+    'ForgetSecond': typeof import("../components/Forget/Second.vue")['default']
     'Header': typeof import("../components/Header.vue")['default']
     'HeaderSearch': typeof import("../components/Header/Search.vue")['default']
     'Login': typeof import("../components/Login.vue")['default']
@@ -21,6 +24,9 @@ declare module '@vue/runtime-core' {
     'NuxtLink': typeof import("../node_modules/nuxt/dist/app/components/nuxt-link")['default']
     'NuxtLoadingIndicator': typeof import("../node_modules/nuxt/dist/app/components/nuxt-loading-indicator")['default']
     'LazyBottom': typeof import("../components/Bottom.vue")['default']
+    'LazyForget': typeof import("../components/Forget.vue")['default']
+    'LazyForgetFirst': typeof import("../components/Forget/First.vue")['default']
+    'LazyForgetSecond': typeof import("../components/Forget/Second.vue")['default']
     'LazyHeader': typeof import("../components/Header.vue")['default']
     'LazyHeaderSearch': typeof import("../components/Header/Search.vue")['default']
     'LazyLogin': typeof import("../components/Login.vue")['default']
@@ -43,6 +49,9 @@ declare module '@vue/runtime-core' {
 }
 
 export const Bottom: typeof import("../components/Bottom.vue")['default']
+export const Forget: typeof import("../components/Forget.vue")['default']
+export const ForgetFirst: typeof import("../components/Forget/First.vue")['default']
+export const ForgetSecond: typeof import("../components/Forget/Second.vue")['default']
 export const Header: typeof import("../components/Header.vue")['default']
 export const HeaderSearch: typeof import("../components/Header/Search.vue")['default']
 export const Login: typeof import("../components/Login.vue")['default']
@@ -62,6 +71,9 @@ export const ServerPlaceholder: typeof import("../node_modules/nuxt/dist/app/com
 export const NuxtLink: typeof import("../node_modules/nuxt/dist/app/components/nuxt-link")['default']
 export const NuxtLoadingIndicator: typeof import("../node_modules/nuxt/dist/app/components/nuxt-loading-indicator")['default']
 export const LazyBottom: typeof import("../components/Bottom.vue")['default']
+export const LazyForget: typeof import("../components/Forget.vue")['default']
+export const LazyForgetFirst: typeof import("../components/Forget/First.vue")['default']
+export const LazyForgetSecond: typeof import("../components/Forget/Second.vue")['default']
 export const LazyHeader: typeof import("../components/Header.vue")['default']
 export const LazyHeaderSearch: typeof import("../components/Header/Search.vue")['default']
 export const LazyLogin: typeof import("../components/Login.vue")['default']

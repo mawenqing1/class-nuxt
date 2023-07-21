@@ -49,6 +49,7 @@ const handleLogin = () => {
     <RegisterFinish></RegisterFinish>
   </div>
   <Login />
+  <Forget />
 </template>
 
 <style lang="less" scoped>

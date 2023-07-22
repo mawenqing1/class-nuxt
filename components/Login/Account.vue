@@ -1,16 +1,29 @@
 <script lang="ts" setup>
 const { changeToForget } = $(useModel())
 
+const currentInfo = reactive({
+  phone: '',
+  password: ''
+})
+
+const rules = {
+  phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
+
+const onFinish = () => {
+  console.log('finish')
+}
 </script>
 
 <template>
   <div>
-    <a-form autocomplete="off" ref="formRef">
-      <a-form-item name="account">
-        <a-input placeholder="请输入账号（手机号或邮箱）" />
+    <a-form autocomplete="off" ref="formRef" :model="currentInfo" @finish="onFinish">
+      <a-form-item name="phone" :rules="rules.phone">
+        <a-input placeholder="请输入手机号" v-model:value="currentInfo.phone" />
       </a-form-item>
-      <a-form-item name="password">
-        <a-input-password type="password" placeholder="请输入密码" autoComplete="false" />
+      <a-form-item name="password" :rules="rules.password">
+        <a-input-password type="password" placeholder="请输入密码" autoComplete="false" v-model:value="currentInfo.password" />
       </a-form-item>
       <div flexb>
         <a-form-item>

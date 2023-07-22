@@ -1,7 +1,23 @@
 <script lang="ts" setup>
 const { forgetModel, switchForget } = $(useModel())
+
+const currentInfo = reactive({
+  code: '',
+  password: ''
+})
+
+const rules = {
+  code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
+}
+
 const back = () => {
   switchForget()
+}
+
+const onFinish = () => {
+  console.log('finish')
+  forgetModel.second = false;
 }
 </script>
 
@@ -9,12 +25,12 @@ const back = () => {
   <a-modal :footer="null" class="w-350px!" v-model:visible="forgetModel.second">
     <h2>重置密码</h2>
     <p text-12px mb-15px>验证码已发送</p>
-    <a-form autocomplete="off" ref="formRef">
-      <a-form-item name="fogSCaptcha">
-        <a-input placeholder="请输入验证码"> </a-input>
+    <a-form autocomplete="off" ref="formRef" :model="currentInfo" @finish="onFinish">
+      <a-form-item name="code" :rules="rules.code">
+        <a-input placeholder="请输入验证码" v-model:value="currentInfo.code" />
       </a-form-item>
-      <a-form-item>
-        <a-input-password placeholder="请输入新修改的密码" autoComplete="new-password" type="password" />
+      <a-form-item name="password" :rules="rules.password">
+        <a-input-password placeholder="请输入新修改的密码" autoComplete="new-password" type="password" v-model:value="currentInfo.password" />
       </a-form-item>
       <a-form-item>
         <a-button block danger type="primary" html-type="submit"> 提交 </a-button>

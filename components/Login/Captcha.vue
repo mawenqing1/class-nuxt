@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import { message } from 'ant-design-vue'
+import { SEND_CODE } from '~/api/notify'
+import { USER_REGISTER } from '~/api/account'
+
+const formRef = ref(null)
 const currentInfo = reactive({
   phone: '',
   code: '',
@@ -12,6 +17,11 @@ const rules = {
 }
 
 const captchaSrc = ref(`http://127.0.0.1:8081/api/notify/v1/captcha?type=login&time=${Date.now()}`)
+const countBtn = reactive({
+  countDown: 60,
+  disabled: false,
+  timer: null
+})
 
 const resetCaptcha = () => {
   if (captchaSrc.value.includes('time')) {
@@ -21,9 +31,49 @@ const resetCaptcha = () => {
   }
 }
 
+const handleCountDown = () => {
+  countBtn.timer = setInterval(() => {
+    countBtn.countDown--
+    if (countBtn.countDown <= 0) {
+      clearInterval(countBtn.timer)
+      countBtn.countDown = 60
+      countBtn.disabled = false
+    }
+  }, 1000)
+}
+
+/**
+ * 获取短信验证码
+ */
+const getCode = () => {
+  formRef.value.validate(['phone', 'captcha']).then(async () => {
+    //验证手机号
+    if (currentInfo.phone) {
+      const phoneReg = /^1[3-9][0-9]{9}$/
+      if (!phoneReg.test(currentInfo.phone)) {
+        message.error('请输入正确的手机号')
+        return
+      }
+    }
+
+    const { code, msg } = await SEND_CODE(currentInfo.phone, currentInfo.captcha, 'login')
+    if (code === 1) {
+      countBtn.disabled = true
+      handleCountDown()
+      message.success('验证码已发送，请注意查收')
+    } else {
+      resetCaptcha()
+    }
+  })
+}
+
 const onFinish = () => {
   console.log('finish')
 }
+
+onBeforeMount(() => {
+  clearInterval(countBtn.timer)
+})
 
 </script>
 
@@ -53,8 +103,8 @@ const onFinish = () => {
         <a-input placeholder="请输入验证码" autoComplete="false" v-model:value="currentInfo.code">
           <template #suffix>
             <div>
-              <a-button type="link" size="small" p-0>
-                获取验证码
+              <a-button type="link" size="small" p-0 :disabled="countBtn.disabled" @click="getCode">
+                {{ countBtn.disabled ? `${countBtn.countDown}s后重新发送` : '获取验证码' }}
               </a-button>
             </div>
           </template>

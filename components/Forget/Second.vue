@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { message } from 'ant-design-vue'
+import { CHANGE_PASSWORD } from '@/api/account'
 const { forgetModel, switchForget } = $(useModel())
 
 const currentInfo = reactive({
@@ -15,9 +17,16 @@ const back = () => {
   switchForget()
 }
 
-const onFinish = () => {
-  console.log('finish')
-  forgetModel.second = false;
+const onFinish = async () => {
+  const { code } = await CHANGE_PASSWORD({
+    phone: forgetModel.phoneCache,
+    code: currentInfo.code,
+    password: currentInfo.password
+  })
+  if(code === 1) {
+    message.success("修改成功")
+    forgetModel.second = false;
+  }
 }
 </script>
 

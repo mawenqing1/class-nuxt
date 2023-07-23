@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { message } from 'ant-design-vue'
 import { SEND_CODE } from '~/api/notify'
-import { USER_REGISTER } from '~/api/account'
+import { USER_LOGIN } from '~/api/account'
+
+let { loginModel } = $(useModel())
+let { switchLoginState } = $(useUser())
 
 const formRef = ref(null)
 const currentInfo = reactive({
@@ -55,10 +58,9 @@ const getCode = () => {
         return
       }
     }
-
+    countBtn.disabled = true
     const { code, msg } = await SEND_CODE(currentInfo.phone, currentInfo.captcha, 'login')
     if (code === 1) {
-      countBtn.disabled = true
       handleCountDown()
       message.success('验证码已发送，请注意查收')
     } else {
@@ -67,8 +69,15 @@ const getCode = () => {
   })
 }
 
-const onFinish = () => {
-  console.log('finish')
+const onFinish = async () => {
+  const {code, data} = await USER_LOGIN(currentInfo)
+  if(code === 1) {
+    message.success('登录成功')
+    loginModel = false;
+    switchLoginState(data.token)
+  } else {
+    message.error('登录失败')
+  }
 }
 
 onBeforeMount(() => {

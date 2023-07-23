@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import {SEND_CODE} from '@/api/notify'
+import { message } from 'ant-design-vue'
 const { forgetModel, switchForget } = $(useModel())
 
 const currentInfo = reactive({
@@ -20,9 +22,13 @@ const resetCaptcha = () => {
   }
 }
 
-const onFinish = () => {
-  console.log('finish')
-  switchForget()
+const onFinish = async () => {
+  const {code, data} = await SEND_CODE(currentInfo.phone, currentInfo.captcha, 'change');
+  if(code === 1) {
+    forgetModel.phoneCache = currentInfo.phone
+    message.success("发送成功")
+    switchForget()
+  }
 }
 </script>
 

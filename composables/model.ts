@@ -14,6 +14,7 @@ export const useModel = defineStore("model", () => {
     const forgetModel = reactive({
         first: false,
         second: false,
+        phoneCache: '' 
     });
 
     const wxModel = ref(false) //微信登录框

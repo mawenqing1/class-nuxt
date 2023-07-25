@@ -1,5 +1,10 @@
 <script setup>
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
 import 'ant-design-vue/es/message/style/css'
+import 'ant-design-vue/es/notification/style/css'
 
 useHead({
   title: '小卿课堂', meta: [

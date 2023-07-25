@@ -1,5 +1,6 @@
 <script setup lang="ts">
 let { registerModel, wxModel, loginModel } = $(useModel())
+const { personalInfo, isLogin, logout } = $(useUser())
 
 const registerForm = reactive({
   phone: '',
@@ -19,6 +20,10 @@ const handleLogin = () => {
   loginModel = true;
 }
 
+const userLogout = function () {
+  logout()
+}
+
 </script>
 
 <template>
@@ -34,7 +39,24 @@ const handleLogin = () => {
       </div>
       <HeaderSearch />
       <div>
-        <div class="login-or-registry" flexc>
+        <div v-if="isLogin" flexc>
+          <a-dropdown>
+            <div relative>
+              <a-avatar :size="50" :src="personalInfo.head_img" />
+            </div>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <span text-center>{{ personalInfo.username }}</span>
+                </a-menu-item>
+                <a-menu-item>
+                  <span text-center @click="userLogout()">退出登录</span>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </div>
+        <div v-else class="login-or-registry" flexc>
           <span mr-8 @click="handleLogin">登录</span>
           <span class="register" @click="registerModel.base = true">
             注册

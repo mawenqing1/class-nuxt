@@ -6,6 +6,10 @@ import 'swiper/css/pagination'
 import 'ant-design-vue/es/message/style/css'
 import 'ant-design-vue/es/notification/style/css'
 
+const { asyncUserInfo } = $(useUser())
+// 同步用户数据
+await asyncUserInfo()
+
 useHead({
   title: '小卿课堂', meta: [
     { name: "description", content: "小卿课堂的网站" },
@@ -22,9 +26,7 @@ useHead({
   </NuxtLayout>
 </template>
 
-<style lang='less' scoped>
-
-</style>
+<style lang='less' scoped></style>
 
 
 

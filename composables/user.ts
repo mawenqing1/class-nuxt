@@ -34,7 +34,7 @@ export const useUser = defineStore(
         return
       }
       const userInfo = (await GET_USER_INFO())
-      if (userInfo.code === 0) {
+      if (userInfo.code === 1) {
         isLogin.value = true
         personalInfo.value = { ...userInfo.data }
       }

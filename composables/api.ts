@@ -7,15 +7,17 @@ export const baseUrl = 'http://127.0.0.1:8081/api'
 
 const _useApi = $fetch.create({
     baseURL: baseUrl,
-    async onRequest() {
-
+    async onRequest({ options }) {
+        const { token } = $(useUser())
+        options.headers = new Headers(options.headers)
+        if (token) options.headers.set('authorization', token)
     },
-    async onResponse({response}) {
+    async onResponse({ response }) {
         const data = response._data;
         if (data.code !== 1) {
             if (data.code === 270004) return;
             message.error(data.msg);
-          }
+        }
     }
 })
 

@@ -2,9 +2,17 @@
 import Banner from './index/Banner.vue'
 import Classify from './index/Classify.vue'
 import UserInformation from './index/UserInformation.vue'
+import CardContainer from './index/CardContainer.vue'
+import { GET_CARD_LIST } from '~/api/card'
+import AliYun from './index/AliYun.vue'
+import AboutInstructor from './index/Instructor/AboutInstructor.vue'
+import BroadSide from './index/BroadSide.vue'
 useHead({
-  title: '小滴课堂 - 首页'
+  title: '小卿课堂 - 首页'
 })
+
+// 视频卡片列表请求接口
+const cardList = $ref((await GET_CARD_LIST()).data)
 </script>
 
 <template>
@@ -23,7 +31,43 @@ useHead({
         <UserInformation />
       </div>
     </div>
-
+    <!-- 热门课程 -->
+    <div class="two-card-container">
+      <CardContainer :title="cardList[0].name" :choice-card="0" :sub-titles="[cardList[0].summay]"
+        :cards="cardList[0].product_list">
+        <!-- 卷王排行榜 -->
+        <LearnRankList />
+      </CardContainer>
+    </div>
+    <!-- 新课上线 -->
+    <div class="two-card-container">
+      <CardContainer :title="cardList[1].name" :choice-card="0" :sub-titles="[cardList[1].summay]"
+        :cards="cardList[1].product_list">
+        <!-- 热销排行榜 -->
+        <HotProduct />
+      </CardContainer>
+    </div>
+    <!-- 中级后端工程师 -->
+    <div class="two-card-container">
+      <CardContainer :title="cardList[2].name" :choice-card="0" :sub-titles="[cardList[2].summay]"
+        :cards="cardList[2].product_list">
+        <!-- 阿里云海报和活动轮播图 -->
+        <AliYun />
+      </CardContainer>
+    </div>
+    <!-- 高级前端技术栈 -->
+    <div class="card-container">
+      <CardContainer :title="cardList[3].name" :choice-card="1" :sub-titles="[cardList[3].summay]"
+        :cards="cardList[3].product_list" />
+    </div>
+    <!-- 讲师介绍 -->
+    <div class="card-container" h-401px>
+      <AboutInstructor />
+    </div>
+    <!-- 侧边栏 -->
+    <client-only>
+      <BroadSide />
+    </client-only>
   </div>
 </template>
 
@@ -31,6 +75,7 @@ useHead({
 .main {
   display: flex;
   height: 400px;
+  margin-bottom: 20px;
 
   .swiper {
     flex: 5;

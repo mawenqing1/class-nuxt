@@ -2,9 +2,6 @@
 let { registerModel, wxModel, loginModel } = $(useModel())
 const { personalInfo, isLogin, logout } = $(useUser())
 
-console.log('isLogin', isLogin);
-
-
 const registerForm = reactive({
   phone: '',
   captcha: '',

@@ -33,7 +33,7 @@ const isMatch = (key: string, value: string) => {
 }
 
 // 分类参数跳转的封装
-const navigateToParser = (key: string, value: string) => {
+const navigateToParser = async (key: string, value: string) => {
   let path = route.fullPath
   // 未选择分类时的点击
   if (path.indexOf('?') == -1) {
@@ -68,7 +68,7 @@ const pagination = reactive({
 })
 
 // 切换分页
-const onPaginationChange = (page: number) => {
+const onPaginationChange = async (page: number) => {
   navigateToParser('page', page.toString())
 }
 
@@ -94,8 +94,7 @@ useHead({
         </div>
         <div class="line" overflow-warp>
           <span>分类：</span>
-          <a-button :type="!$route.query.cid ? 'primary' : 'text'"
-            @click="navigateTo(`/videoListPage?id=${currentId}`)">
+          <a-button :type="!$route.query.cid ? 'primary' : 'text'" @click="navigateTo(`/videoListPage?id=${currentId}`)">
             全部
           </a-button>
           <a-button v-for="item in getSubCategoryList" :type="isMatch('cid', `${item.id}`)"

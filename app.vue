@@ -22,7 +22,7 @@ useHead({
 
 <template>
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :key="$route.fullPath" />
   </NuxtLayout>
 </template>
 

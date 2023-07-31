@@ -38,9 +38,8 @@ import { message } from 'ant-design-vue'
     </div>
     <a-divider />
     <div class="copyright">
-      Copyright © 2018 Company,lnc.
-      <a href="https://www.beian.gov.cn/"> &nbsp;粤ICP备15092968号&nbsp; </a>
-      Terms
+      MIT Licensed | Copyright © 2021-2026 热爱生活 喜欢睡觉 |
+      <a href="https://www.beian.gov.cn/"> &nbsp;ICP证：豫ICP备2021013438号-1&nbsp; </a>
     </div>
   </div>
 </template>

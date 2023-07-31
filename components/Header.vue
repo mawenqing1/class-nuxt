@@ -34,7 +34,7 @@ const userLogout = function () {
           <span text-20px font-600>小卿课堂</span>
         </NuxtLink>
         <NuxtLink to="/">首页</NuxtLink>
-        <NuxtLink>课程中心</NuxtLink>
+        <NuxtLink to="/videoListPage">课程中心</NuxtLink>
         <a target="_blank">云服务器</a>
       </div>
       <HeaderSearch />

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { GET_CATEGROY_LIST } from '~/api/category'
+import { QUERY_PRODUCT_BY_CID } from '~/api/product'
+import CardContainer from './index/CardContainer.vue'
 const route = useRoute()
 
 // 当前id
@@ -47,6 +49,28 @@ const navigateToParser = (key: string, value: string) => {
   navigateTo(path)
 }
 
+// 课程列表接口请求
+let data = $ref((
+  await QUERY_PRODUCT_BY_CID({
+    cid: Number(route.query.cid) || undefined,
+    page: Number(route.query.page) || 1,
+    size: 12,
+    cpid: Number(route.query.id) || undefined,
+  })).data
+)
+
+// 分页数据
+const pagination = reactive({
+  page: Number(route.query.page) || 1, // 当前页数
+  pageSize: 12, // 当前页视频个数
+  total: data.total_record, // 当前视频总数
+  cards: data.current_data as any // 视频列表
+})
+
+// 切换分页
+const onPaginationChange = (page: number) => {
+  navigateToParser('page', page.toString())
+}
 
 useHead({
   title: '小滴课堂 - 课程中心'
@@ -55,7 +79,7 @@ useHead({
 </script>
 
 <template>
-  <div wfull flex-col>
+  <div wfull flexc flex-col>
     <div wfull flexc bg="#f9f9f9">
       <div class="category" flex flex-col w-1200px>
         <div class="line">
@@ -79,6 +103,15 @@ useHead({
             {{ item.name }}
           </a-button>
         </div>
+      </div>
+    </div>
+    <div class="video-list" flexc>
+      <div class="left" v-if="pagination.cards.length > 0">
+        <CardContainer card-size="small" :gridRows="1" :gridColumns="3" :choiceCard="0" :cards="pagination.cards" />
+        <Pagination :pagination="pagination" @change="onPaginationChange" />
+      </div>
+      <div v-else :style="{ width: '100%', textAlign: 'center', marginTop: '300px' }">
+        <Blank text="暂无课程。。。" />
       </div>
     </div>
   </div>

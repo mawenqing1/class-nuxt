@@ -1,4 +1,4 @@
-import type { IPoductQuery } from '~/types/api'
+import type { IPoductQuery, IVideoDitails, IlatestLearn } from '~/types/api'
 
 /**
  * 根据分类ID获取数据
@@ -15,3 +15,23 @@ export const QUERY_PRODUCT_BY_CID = async function (params: {
     body: params
   })
 }
+
+/**
+ * 获取视频详情
+ * @param id 视频id
+ */
+export const GET_VIDEO_DETAILS = async (id: number) => {
+  return await useApi<IVideoDitails>('/product/v1/detail', {
+    params: { id },
+  });
+};
+
+/**
+ * 最近在学
+ * @param id 视频ID
+ */
+export const GET_LATEST_LEARN = async (id: number) => {
+  return await useApi<IlatestLearn[]>('order/v1/latest', {
+    params: { id },
+  });
+};

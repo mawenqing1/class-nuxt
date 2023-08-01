@@ -16,6 +16,8 @@ const _useApi = $fetch.create({
         const data = response._data;
         if (data.code !== 1) {
             if (data.code === 270004) return;
+            if (data.code === 250004) return;
+            if (data.code === 280001) return;
             message.error(data.msg);
         }
     }

@@ -73,7 +73,7 @@ const onPaginationChange = async (page: number) => {
 }
 
 useHead({
-  title: '小滴课堂 - 课程中心'
+  title: '小卿课堂 - 课程中心'
 })
 
 </script>

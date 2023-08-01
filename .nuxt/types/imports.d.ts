@@ -85,6 +85,7 @@ declare global {
   const useLazyAsyncData: typeof import('../../node_modules/nuxt/dist/app')['useLazyAsyncData']
   const useLazyFetch: typeof import('../../node_modules/nuxt/dist/app')['useLazyFetch']
   const useLink: typeof import('vue-router')['useLink']
+  const useMaterials: typeof import('../../composables/materials')['useMaterials']
   const useMeta: typeof import('../../node_modules/nuxt/dist/head/runtime')['useMeta']
   const useModel: typeof import('../../composables/model')['useModel']
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app')['useNuxtApp']
@@ -196,6 +197,7 @@ declare module '@vue/runtime-core' {
     readonly useLazyAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useLazyAsyncData']>
     readonly useLazyFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useLazyFetch']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
+    readonly useMaterials: UnwrapRef<typeof import('../../composables/materials')['useMaterials']>
     readonly useMeta: UnwrapRef<typeof import('../../node_modules/nuxt/dist/head/runtime')['useMeta']>
     readonly useModel: UnwrapRef<typeof import('../../composables/model')['useModel']>
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useNuxtApp']>

@@ -7,6 +7,10 @@ import { defineStore } from 'pinia';
 export const useVideo = defineStore('video', () => {
   const videoInfor = reactive({
     orderState: false,
+    videoPrice: null,
+    easyPoint: null,
+    logicPoint: null,
+    contentPoint: null,
   });
   // 检查课程是否购买
   const checkPay = async (id: number) => {

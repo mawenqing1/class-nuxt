@@ -2,10 +2,14 @@
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay } from 'swiper'
 import { GET_VIDEO_DETAILS, GET_LATEST_LEARN } from '~/api/product'
+import OutLine from './videoDetailsPage/OutLine.vue'
 
 const levelMap = { JUNIOR: '初级', MIDDLE: '中级', SENIOR: '高级' }
 
 const { checkPay, videoInfor } = $(useVideo())
+
+// tab选中状态
+const activeKey = $ref(0)
 
 const realVideoId = $computed(() => {
   return Number(useRoute().query.id) || 1
@@ -14,9 +18,22 @@ checkPay(realVideoId)
 
 // 课程详情数据
 const detailsData = reactive((await GET_VIDEO_DETAILS(realVideoId)).data)
+// 将课程的评分数据暂存在pinia
+videoInfor.videoPrice = Number(detailsData.amount)
+videoInfor.easyPoint = Number(detailsData.easy_point)
+videoInfor.logicPoint = Number(detailsData.logic_point)
+videoInfor.contentPoint = Number(detailsData.content_point)
 
 // 学员学习动态
 const latestLearnData = reactive((await GET_LATEST_LEARN(1)).data)
+
+// 课程介绍海报
+const inlineHtml = (html: string) => {
+  if (html.startsWith('http')) {
+    return `<img src="${html}" />`
+  }
+  return html
+}
 
 useHead({ title: '小卿课堂 - 视频详情页' })
 
@@ -79,7 +96,26 @@ useHead({ title: '小卿课堂 - 视频详情页' })
               </div>
             </div>
             <!-- 课程详情tab -->
-
+            <ul mt-41px grid grid-cols-6 ml-65px color="#4f555d" text-16px font-600 class="li" h-53px>
+              <li :class="[activeKey === 0 ? 'active' : '']" @click="activeKey = 0">课程介绍</li>
+              <li :class="[activeKey === 1 ? 'active' : '']" @click="activeKey = 1">课程目录</li>
+              <li :class="[activeKey === 2 ? 'active' : '']" @click="activeKey = 2">用户评价</li>
+              <li :class="[activeKey === 3 ? 'active' : '']" @click="activeKey = 3">课程资料</li>
+            </ul>
+            <div>
+              <div v-show="activeKey === 0">
+                <div v-html="inlineHtml(detailsData?.summary)" class="introduce-content"></div>
+              </div>
+              <div v-show="activeKey === 1">
+                <OutLine :id="realVideoId" />
+              </div>
+              <div v-show="activeKey === 2">
+                <UserComment :id="realVideoId" />
+              </div>
+              <div v-show="activeKey === 3">
+                <Materials :id="realVideoId" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -310,7 +346,9 @@ useHead({ title: '小卿课堂 - 视频详情页' })
     li {
       cursor: pointer;
       margin-right: 60px;
+      white-space: nowrap;
       position: relative;
+      list-style: none;
 
       &:hover {
         font-size: 18px;

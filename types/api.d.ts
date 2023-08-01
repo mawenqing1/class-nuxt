@@ -162,8 +162,8 @@ export interface IVideoDitails {
     easy_point: string;
     logic_point: string;
     teacherDetail: TeacherDetail;
-  }
-  export interface TeacherDetail {
+}
+export interface TeacherDetail {
     id: number;
     name: string;
     profile: string;
@@ -176,12 +176,12 @@ export interface IVideoDitails {
     online: string;
     gmt_create: string;
     gmt_modified: string;
-  }
-  
-  /**
-   * 最近在学接口返回参数
-   */
-  export interface IlatestLearn {
+}
+
+/**
+ * 最近在学接口返回参数
+ */
+export interface IlatestLearn {
     id: number;
     account_id: number;
     username: string;
@@ -204,4 +204,61 @@ export interface IVideoDitails {
     notify_time: null;
     gmt_create: string;
     gmt_modified: string;
-  }
+}
+
+/**
+* 视频章集接口参数返回
+*/
+export interface IChapter {
+    id: number;
+    product_id: number;
+    title: string;
+    ordered: number;
+    gmt_create: string;
+    gmt_modified: string;
+    episodeList: EpisodeList[];
+}
+export interface EpisodeList {
+    id: number;
+    title: string;
+    ordered: number;
+    hwyun_id: string;
+    aliyun_id: string;
+    chapter_id: number;
+    duration: string;
+    free: number;
+    product_id: number;
+    gmt_create: string;
+    gmt_modified: string;
+}
+/**
+ * 课程评论列表返回参数
+ */
+export interface IComment {
+    current_data: CurrentDatum[];
+    total_page: number;
+    total_record: number;
+}
+export interface CurrentDatum {
+    id: number;
+    content: string;
+    account_id: number;
+    head_img: string;
+    username: string;
+    up: number;
+    order_id: number;
+    product_id: number;
+    gmt_create: string;
+    gmt_modified: string;
+    total_point: string;
+    content_point: string;
+    easy_point: string;
+    logic_point: string;
+    del: number;
+}
+
+// 资料接口返回参数
+export interface IVideoMaterials {
+    bd_zip_url: string;
+    note_url: string;
+}

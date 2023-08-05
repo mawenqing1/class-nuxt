@@ -262,3 +262,10 @@ export interface IVideoMaterials {
     bd_zip_url: string;
     note_url: string;
 }
+
+// 热门商品排行榜
+export interface IHotProduct {
+    id: number;
+    title: Title;
+    img: string;
+  }

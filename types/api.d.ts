@@ -268,4 +268,10 @@ export interface IHotProduct {
     id: number;
     title: Title;
     img: string;
-  }
+}
+
+// 课程支付二维码
+export interface IWechatPay {
+    code_url: string;
+    out_trade_no: string;
+}

@@ -1,7 +1,34 @@
 <script lang="ts" setup>
 import { GET_VIDEO_DETAILS } from '~/api/product'
+import { wechatPay } from '~/api/order'
+import Wechat from './payPage/Wechat.vue'
+
 // 课程详情数据
 const detailsData = reactive((await GET_VIDEO_DETAILS(Number(useRoute().query.id))).data)
+
+// 支付订单号
+let outTradeNo = $ref('')
+
+// 定义二维码 DOM id和控制弹窗展开变量
+const wechat = reactive({
+  id: 'wechatQrcode',
+  visible: false
+})
+
+// 关闭二维码弹窗
+const onCancel = () => {
+  wechat.visible = false
+}
+
+// 立即支付按钮
+const getWechatPay = async () => {
+  // 请求支付二维码
+  const data = await wechatPay({ id: 1, type: 'PC' })
+  // 如果不是客户端时机或者请求不成功就终止
+  if (data.code !== 1 || process.server) return
+  outTradeNo = data.data.out_trade_no
+  wechat.visible = true
+}
 
 useHead({
   title: '小滴课堂 - 商品支付'
@@ -35,12 +62,15 @@ useHead({
             <span color="#222222" text-24px>总计支付：</span>
             <span text-44px color="#ff4439">￥{{ Number(detailsData.amount).toFixed() }}</span>
           </div>
-          <button bg="#f38e48" class="btn border-none ml-45px mr-20px center-text-64 w-210px rounded-full text-white text-24px">
+          <button bg="#f38e48"
+            class="btn border-none ml-45px mr-20px center-text-64 w-210px rounded-full text-white text-24px"
+            @click="getWechatPay">
             立即支付
           </button>
         </div>
       </div>
     </div>
+    <Wechat :wechat="wechat" :outTradeNo="outTradeNo" @onCancel="onCancel()" />
   </div>
 </template>
 

@@ -16,6 +16,8 @@ export const useVideo = defineStore('video', () => {
   const checkPay = async (id: number) => {
     if ((await QUERY_PAY(id)).code == 0) {
       videoInfor.orderState = true;
+    } else {
+      videoInfor.orderState = false;
     }
   };
 

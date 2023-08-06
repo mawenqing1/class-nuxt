@@ -35,6 +35,11 @@ const inlineHtml = (html: string) => {
   return html
 }
 
+// 跳转购买页面
+const toPayPage = () => {
+  navigateTo(`/payPage?id=${realVideoId}`)
+}
+
 useHead({ title: '小卿课堂 - 视频详情页' })
 
 </script>
@@ -77,7 +82,7 @@ useHead({ title: '小卿课堂 - 视频详情页' })
           </div>
           <img class="try-click" :src="detailsData.cover_img" />
           <span class="btn yellow" v-if="videoInfor.orderState">立即学习</span>
-          <span class="btn" v-else>购买</span>
+          <span class="btn" v-else @click="toPayPage">购买</span>
         </div>
       </div>
 

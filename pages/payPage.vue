@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { GET_VIDEO_DETAILS } from '~/api/product'
-import { wechatPay } from '~/api/order'
+import { WECHAT_PAY, QUERY_STATE } from '~/api/order'
 import Wechat from './payPage/Wechat.vue'
 
 // 课程详情数据
-const detailsData = reactive((await GET_VIDEO_DETAILS(Number(useRoute().query.id))).data)
+const detailsData = reactive((await GET_VIDEO_DETAILS(Number(useRoute().query.id) || 1)).data)
 
 // 支付订单号
 let outTradeNo = $ref('')
@@ -18,17 +18,34 @@ const wechat = reactive({
 // 关闭二维码弹窗
 const onCancel = () => {
   wechat.visible = false
+  clearInterval(timer)
 }
 
 // 立即支付按钮
 const getWechatPay = async () => {
   // 请求支付二维码
-  const data = await wechatPay({ id: 1, type: 'PC' })
+  const data = await WECHAT_PAY({ id: (Number(useRoute().query.id) || 1), type: 'PC' })
   // 如果不是客户端时机或者请求不成功就终止
   if (data.code !== 1 || process.server) return
   outTradeNo = data.data.out_trade_no
   wechat.visible = true
 }
+
+// 监听支付回调
+let timer = $ref(null)
+watch(
+  () => outTradeNo,
+  (val) => {
+    // 三秒查询查询一次
+    timer = setInterval(async () => {
+      const data = await QUERY_STATE(val)
+      if (data.code === 1 && data.data.order_state === 'PAY') {
+        clearInterval(timer)
+        await navigateTo('/')
+      }
+    }, 3000)
+  }
+)
 
 useHead({
   title: '小滴课堂 - 商品支付'

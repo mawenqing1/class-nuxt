@@ -275,3 +275,8 @@ export interface IWechatPay {
     code_url: string;
     out_trade_no: string;
 }
+
+// 轮询查询订单状态
+export interface IOrderState {
+    order_state: string;
+}

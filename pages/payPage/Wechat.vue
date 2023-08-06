@@ -1,8 +1,18 @@
 <script lang="ts" setup>
+import { PAY_CALLBACK } from '~/api/order'
+import { message } from 'ant-design-vue'
+
 const { wechat, outTradeNo } = defineProps<{ wechat: { id: string, visible: boolean }, outTradeNo: string }>()
 
 // 自定义事件
 defineEmits<{ (e: 'onCancel'): void }>()
+
+const handlePay = async () => {
+  const data = await PAY_CALLBACK(outTradeNo)
+  if (data.code === 1) {
+    message.success('支付成功')
+  }
+}
 
 </script>
 
@@ -16,7 +26,7 @@ defineEmits<{ (e: 'onCancel'): void }>()
         <p mt-24px color="#7f7f7f" ml-15px>请尽快扫码完成支付，以便订单尽快处理！</p>
         <div class="bottom-opt">
           <a-button @click="$emit('onCancel')">关闭</a-button>
-          <a-button type="primary">购买</a-button>
+          <a-button type="primary" @click="handlePay">购买</a-button>
         </div>
       </div>
     </div>

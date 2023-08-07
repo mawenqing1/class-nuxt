@@ -1,10 +1,40 @@
 <script lang="ts" setup>
+import { message } from 'ant-design-vue';
+
 const { item, index } = defineProps(['item', 'index'])
+let { videoInfor } = $(useVideo())
+let { isLogin } = $(useUser())
+const realVideoId = useRoute().query.id
 
 // 章节收缩
 let sectionShow = $ref(false)
 const chapterClick = () => {
   sectionShow = !sectionShow
+}
+
+// 集点击播放
+const sectionClick = (val) => {
+  // 是否登录
+  if (isLogin) {
+    // 是否购买
+    if (videoInfor.orderState) {
+      toPlayer(val)
+    } else {
+      // 是否试看
+      if (val.free === 0) {
+        toPlayer(val)
+      } else {
+        message.warn('请先购买')
+      }
+    }
+  } else {
+    message.warn('请先登录')
+  }
+}
+
+// 播放视频
+const toPlayer = (val) => {
+  navigateTo(`/videoPlayPage?id=${realVideoId}&eid=${val.id}`)
 }
 
 </script>
@@ -23,7 +53,7 @@ const chapterClick = () => {
     </div>
     <!-- 集模块 -->
     <div class="collection" flex v-for="(subItem, subIndex) in item.episodeList"
-      v-show="sectionShow && item.episodeList.length > 0">
+      v-show="sectionShow && item.episodeList.length > 0" @click="sectionClick(subItem)">
       <div flex>
         <img w-22px h-22px src="/images/play.png" />
         <div ml-2px>{{ `第 ${subIndex + 1} 节 &nbsp;${subItem.title}` }}</div>

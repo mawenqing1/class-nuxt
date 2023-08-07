@@ -17,12 +17,20 @@ let newPlayer = async (playSrc: string) => {
       fill: true, // 填充模式
       playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2.0],
     })
+    // 自动播放
+    player.on('loadedmetadata', () => player.play())
   }
   player.src({
     src: playSrc,
     type: 'application/x-mpegURL' // 流设置: m3u8
   })
 }
+
+// 组件即将销毁时删除播放器
+onBeforeUnmount(() => {
+  if (player) player.dispose()
+})
+
 defineExpose({ newPlayer })
 
 </script>

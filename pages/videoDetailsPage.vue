@@ -40,6 +40,11 @@ const toPayPage = () => {
   navigateTo(`/payPage?id=${realVideoId}`)
 }
 
+// 跳转播放页面
+const toVideoPlayPage = () => {
+  navigateTo(`/videoPlayPage?id=${realVideoId}`)
+}
+
 useHead({ title: '小卿课堂 - 视频详情页' })
 
 </script>
@@ -80,7 +85,7 @@ useHead({ title: '小卿课堂 - 视频详情页' })
             <img src="/images/svg/play.svg" w-32px h-32px />
             <span text-18px color-white font-600>点击试看</span>
           </div>
-          <img class="try-click" :src="detailsData.cover_img" />
+          <img class="try-click" :src="detailsData.cover_img" @click="toVideoPlayPage" />
           <span class="btn yellow" v-if="videoInfor.orderState">立即学习</span>
           <span class="btn" v-else @click="toPayPage">购买</span>
         </div>

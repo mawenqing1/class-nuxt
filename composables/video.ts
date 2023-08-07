@@ -14,7 +14,7 @@ export const useVideo = defineStore('video', () => {
   });
   // 检查课程是否购买
   const checkPay = async (id: number) => {
-    if ((await QUERY_PAY(id)).code == 0) {
+    if ((await QUERY_PAY(id)).code == 1) {
       videoInfor.orderState = true;
     } else {
       videoInfor.orderState = false;

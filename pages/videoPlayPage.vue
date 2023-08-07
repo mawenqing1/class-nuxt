@@ -1,27 +1,73 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
+import Player from './videoPlayPage/Player.vue'
 import { GET_CHAPTER } from '~/api/product'
+import { getVideo } from '~/api/video'
+import { IChapter } from '~/types/api'
 
-const realVideoId = Number(useRoute().query.id) || 1
-
-let expandShow = $ref(false)
-
+// tab数据
 const navList = [
   {
     title: '章节',
     img: '/images/zhangjie.png',
     imga: '/images/zhangjiea.png'
-  }
+  },
 ]
 
-// 右侧tab选择
+/**
+ * 视频状态管理
+ */
+let _episodeId = $ref(Number(useRoute().query.eid))
+
+const realVideoId = $computed(() => {
+  return Number((useRoute().query.id)) || 1
+})
+
+
+/**
+ * 目录接口数据
+ */
+let chapterList = $ref<IChapter[]>([])
+const getChapterList = async () => {
+  const res = await GET_CHAPTER(realVideoId)
+  chapterList = res.data
+  _episodeId = _episodeId || res.data[0].episodeList[0].id
+  await getVideoData(_episodeId)
+}
+
+/**
+ * 集数选择
+ */
+const sectionClick = async (val: any) => {
+  await getVideoData(val.id)
+}
+
+/**
+ * 视频源
+ */
+const xqclassPlayer = $ref<{ newPlayer: (playSrc: string) => void }>()
+
+const getVideoData = async (id?: number) => {
+  const res = await getVideo({ episodeId: id })
+  if (res.code === 1) {
+    _episodeId = id
+    navigateTo(`videoPlayPage?id=${realVideoId}&eid=${id}`)
+    xqclassPlayer?.newPlayer(res.data.playResult)
+  }
+}
+onMounted(async () => {
+  await getChapterList()
+})
+
+// 左侧tab项点击
 let navSelect = $ref(null)
+let expandShow = $ref(false)
 const navClick = (val: number) => {
   if (navSelect === val) {
     navSelect = -1
     expandShow = !expandShow
     return
   } else {
-    // 将选中的集展示再视口
+    // 章集默认展示集播放视频
     if (val === 0) {
       if (process.server) return
       const oChapterSection = document.querySelector('.chapter-section') as HTMLDivElement
@@ -30,7 +76,7 @@ const navClick = (val: number) => {
           const chapter = oChapterSection.children[i]
           for (let i = 0; i < chapter.children[1].children.length; i++) {
             const episode = chapter.children[1].children[i]
-
+            // 将播放的对应集展示在视口
             if (episode.classList.contains('selected')) {
               chapter.scrollIntoView({ behavior: 'auto', block: 'center' })
               document.body.scrollIntoView()
@@ -45,50 +91,48 @@ const navClick = (val: number) => {
   }
 }
 
-// 视频集
-let _episodeId = $ref(Number(useRoute().query.eid))
-
-// 目录接口数据
-const data = reactive({ chapterList: [] })
-const getChapterList = async () => {
-  const res = await GET_CHAPTER(realVideoId)
-  data.chapterList = res.data
-  _episodeId = _episodeId || res.data[0].episodeList[0].id
-}
-
-
-onMounted(() => {
-  getChapterList()
-})
-
 useHead({ title: '小滴课堂 - 视频播放' })
 </script>
 
 <template>
   <div wfull flexc flex-col>
-    <div wfull bg="#191917" absolute h-87vh top-90px />
+    <div wfull bg="#191917" absolute h-87vh :style="{ top: '90px' }" />
+
+    <!-- 左侧tab -->
     <div class="video-play" h-90vh>
       <div class="left">
         <div class="left-item" v-for="(item, index) in navList" :class="{ active: navSelect === index }"
-          :style="{ backgroundColor: navSelect === index ? '#20201e' : '' }" @click="navClick(index)">
+          @click="navClick(index)" :style="{ backgroundColor: navSelect === index ? '#20201e' : '' }">
           <img wh-28 :src="navSelect === index ? item.imga : item.img" />
           <div class="text">{{ item.title }}</div>
         </div>
       </div>
+      <!-- 章集 -->
       <div v-show="expandShow">
-        <!-- 章集 -->
         <div class="sidebar-left" v-show="navSelect === 0">
           <div class="chapter-section">
-            <div class="item" v-for="(item, index) in data.chapterList">
+            <div class="item" v-for="(item, index) in chapterList">
               <div class="chapter-text" :title="item.title">第 {{ index + 1 }} 章&nbsp; {{ item.title }}</div>
               <div class="section">
                 <div class="section-item" v-for="(subItem, subIndex) in item.episodeList"
-                  :class="{ selected: subItem.id === _episodeId }" :title="subItem.title">
+                  :class="{ selected: subItem.id === _episodeId }" @click="sectionClick(subItem)"
+                  :title="subItem.title">
                   第 {{ subIndex + 1 }} 集 &nbsp;{{ subItem.title }}
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 视频播放器  -->
+      <div flex="~ col" class="video-player">
+        <div class="player relative flex items-center" id="video_wrapper" style="width: 100%; height: 97%"
+          @click="navSelect = null">
+          <ClientOnly>
+            <Player ref="xqclassPlayer" :episode-id="_episodeId" :product-id="realVideoId" :chapter-list="chapterList"
+              @get-video-data="getVideoData" />
+          </ClientOnly>
         </div>
       </div>
     </div>
@@ -98,7 +142,7 @@ useHead({ title: '小滴课堂 - 视频播放' })
 <style lang="less" scoped>
 .nav-bg {
   background-color: #20201e;
-  height: 94.5%;
+  height: 82.5%;
   width: 360px;
   left: 140px;
   position: absolute;
@@ -236,7 +280,7 @@ useHead({ title: '小滴课堂 - 视频播放' })
     position: absolute;
     z-index: 1000;
     left: 140px;
-    height: 93%;
+    height: 89.1%;
 
     .chapter-section {
       padding: 10px;

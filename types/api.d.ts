@@ -280,3 +280,9 @@ export interface IWechatPay {
 export interface IOrderState {
     order_state: string;
 }
+
+// 视频播放地址
+export interface IVideoList {
+    playResult: string;
+    episodeId: string;
+}

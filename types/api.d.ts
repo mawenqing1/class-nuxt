@@ -286,3 +286,11 @@ export interface IVideoList {
     playResult: string;
     episodeId: string;
 }
+
+// 卷王排行榜
+export interface IDuration {
+    id: number;
+    username: string;
+    head_img: string;
+    minute: string;
+}

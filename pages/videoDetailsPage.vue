@@ -86,7 +86,7 @@ useHead({ title: '小卿课堂 - 视频详情页' })
             <span text-18px color-white font-600>点击试看</span>
           </div>
           <img class="try-click" :src="detailsData.cover_img" @click="toVideoPlayPage" />
-          <span class="btn yellow" v-if="videoInfor.orderState">立即学习</span>
+          <span class="btn yellow" v-if="videoInfor.orderState" @click="toVideoPlayPage">立即学习</span>
           <span class="btn" v-else @click="toPayPage">购买</span>
         </div>
       </div>

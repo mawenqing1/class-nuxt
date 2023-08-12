@@ -294,3 +294,21 @@ export interface IDuration {
     head_img: string;
     minute: string;
 }
+
+// 弹幕列表
+export interface IDanmu {
+    id: number;
+    product_id: number;
+    episode_id: number;
+    account_id: number;
+    head_img: string;
+    username: string;
+    content: string;
+    style: null | string;
+    play_time: number;
+    source_type: string;
+    target_url: null | string;
+    gmt_create: string;
+    gmt_modified: string;
+    del: number;
+}  

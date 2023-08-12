@@ -3,6 +3,7 @@ import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { IChapter } from '~/types/api'
 import vueDanmaku from 'vue3-danmaku/dist/vue3-danmaku.esm'
+import { listByEpisodeId, addDanmu } from '~/api/bulletScreen'
 
 const { productId, episodeId, chapterList } = defineProps<{
   productId: number
@@ -16,6 +17,31 @@ const emit = defineEmits<{ (e: 'getVideoData', value: number): void }>()
  * 弹幕逻辑
  */
 let danmakuRef = $ref<InstanceType<typeof vueDanmaku>>()
+let danmuTimer = $ref<NodeJS.Timer>()
+let oVideoPlayer: HTMLVideoElement
+let danmuList = $ref([])
+async function getDanmuData(push?: boolean) {
+  const currentTime = Math.floor(oVideoPlayer.currentTime)
+  if (!push) {
+    danmuList = (
+      await listByEpisodeId({
+        productId: productId,
+        episodeId: episodeId,
+        endTime: currentTime + 10,
+        beginTime: currentTime
+      })
+    ).data
+  } else {
+    await listByEpisodeId({
+      productId: productId,
+      episodeId: episodeId,
+      endTime: currentTime + 10,
+      beginTime: currentTime
+    }).then((item) => {
+      item.data.map((subItem) => danmakuRef.push(subItem))
+    })
+  }
+}
 
 /**
  * 实例化播放器
@@ -41,6 +67,13 @@ let newPlayer = async (playSrc: string) => {
     player.on('pause', onPlayerPause) // 播放器暂停
     player.on('loadedmetadata', onPlayerReady) // 播放器加载完成
     player.on('ended', nextEpisod)  // 播放器结束
+    player.on('seeked', onPlayerSeeked) // 手动选择进度
+    // 视频尺寸改变，重新计算滚动距离
+    player.on('fullscreenchange', () => {
+      oDanmu.style.width = `${oVideoPlayer.offsetWidth}px`
+      oDanmu.style.height = `${oVideoPlayer.offsetHeight}px`
+      danmakuRef.resize()
+    })
   }
   player.src({
     src: playSrc,
@@ -50,17 +83,25 @@ let newPlayer = async (playSrc: string) => {
 
 // 当播放器暂停的时候弹幕暂停
 const onPlayerPause = function () {
+  if (danmuTimer) clearInterval(danmuTimer)
   danmakuRef?.pause()
 }
 
 // 当播放器播放时候滚动弹幕
 const onPlayerPlay = function () {
+  if (danmuTimer) clearInterval(danmuTimer)
+  danmuTimer = setInterval(async () => {
+    await getDanmuData(true)
+  }, 10 * 1000)
   danmakuRef?.play()
 }
 
 // 当播放器加载好的时候初始化dom
 const onPlayerReady = async function () {
   oVideo = document.querySelector('.vjs-tech') as HTMLVideoElement
+  oVideoPlayer = document.querySelector('#video_wrapper div video') as HTMLVideoElement
+
+  await getDanmuData()
   oDanmu = document.querySelector('#_danmu') as HTMLDivElement
 
   // 设置弹幕的显示位置
@@ -75,6 +116,24 @@ const onPlayerReady = async function () {
   })
   // 视频自动播放
   player.play()
+}
+
+// 当播放器手动选择进度
+const onPlayerSeeked = async function () {
+  if (danmuTimer) clearInterval(danmuTimer)
+  danmuList = []
+  // 停止弹幕清空
+  danmakuRef.stop()
+  // 重置弹幕
+  danmakuRef.reset()
+  // 请求数据
+  await getDanmuData()
+  // 弹幕开始
+  danmakuRef.play()
+  // 开启弹幕接口轮询
+  danmuTimer = setInterval(async () => {
+    await getDanmuData(true)
+  }, 10 * 1000)
 }
 
 // 视频播放结束自动切换本章下一集
@@ -96,38 +155,10 @@ function nextEpisod() {
 // 组件即将销毁时删除播放器
 onBeforeUnmount(() => {
   if (player) player.dispose()
+  if (danmuTimer) clearInterval(danmuTimer)
 })
 
 defineExpose({ newPlayer })
-
-const danmuList = [
-  {
-    head_img: "https://file.xdclass.net/user_file/2022/09/60027b661a6738f62d5b44834484477d.jpeg",
-    content: '啊实打实多多',
-    style: 'COMMON_1'
-  },
-  {
-    head_img: "https://file.xdclass.net/user_file/2022/09/60027b661a6738f62d5b44834484477d.jpeg",
-    content: '啊实打实多多',
-    style: 'COMMON_2'
-  },
-  {
-    head_img: "https://file.xdclass.net/user_file/2022/09/60027b661a6738f62d5b44834484477d.jpeg",
-    content: '啊实打实多多',
-    style: 'COMMON_3'
-  },
-  {
-    head_img: "https://file.xdclass.net/user_file/2022/09/60027b661a6738f62d5b44834484477d.jpeg",
-    content: '啊实打实多多',
-    style: 'COMMON_4'
-  },
-  {
-    head_img: "https://file.xdclass.net/user_file/2022/09/60027b661a6738f62d5b44834484477d.jpeg",
-    content: '啊实打实多多',
-    style: 'COMMON_5'
-  },
-]
-
 </script>
 
 <template>

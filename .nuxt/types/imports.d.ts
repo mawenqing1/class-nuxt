@@ -96,6 +96,7 @@ declare global {
   const useRouter: typeof import('../../node_modules/nuxt/dist/app')['useRouter']
   const useRuntimeConfig: typeof import('../../node_modules/nuxt/dist/app')['useRuntimeConfig']
   const useSlots: typeof import('vue')['useSlots']
+  const useSocket: typeof import('../../composables/socket')['useSocket']
   const useState: typeof import('../../node_modules/nuxt/dist/app')['useState']
   const useTransitionState: typeof import('vue')['useTransitionState']
   const useUser: typeof import('../../composables/user')['useUser']
@@ -208,6 +209,7 @@ declare module '@vue/runtime-core' {
     readonly useRouter: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useRouter']>
     readonly useRuntimeConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useRuntimeConfig']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSocket: UnwrapRef<typeof import('../../composables/socket')['useSocket']>
     readonly useState: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['useState']>
     readonly useTransitionState: UnwrapRef<typeof import('vue')['useTransitionState']>
     readonly useUser: UnwrapRef<typeof import('../../composables/user')['useUser']>

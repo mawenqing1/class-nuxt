@@ -3,7 +3,7 @@ import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { IChapter } from '~/types/api'
 import vueDanmaku from 'vue3-danmaku/dist/vue3-danmaku.esm'
-import { listByEpisodeId, addDanmu } from '~/api/bulletScreen'
+import { LIST_BY_EPISODE_ID, ADD_BARRAGE } from '~/api/bulletScreen'
 import { message } from 'ant-design-vue'
 
 const { personalInfo } = $(useUser())
@@ -30,7 +30,7 @@ async function getDanmuData(push?: boolean) {
   const currentTime = Math.floor(oVideoPlayer.currentTime)
   if (!push) {
     danmuList = (
-      await listByEpisodeId({
+      await LIST_BY_EPISODE_ID({
         productId: productId,
         episodeId: episodeId,
         endTime: currentTime + 10,
@@ -38,7 +38,7 @@ async function getDanmuData(push?: boolean) {
       })
     ).data
   } else {
-    await listByEpisodeId({
+    await LIST_BY_EPISODE_ID({
       productId: productId,
       episodeId: episodeId,
       endTime: currentTime + 10,
@@ -208,7 +208,7 @@ const sendDanmu = async function (danmuContent: string) {
     playTime: oVideoPlayer.currentTime + Math.random() / 0.5
   }
   // 增加弹幕接口
-  const data = await addDanmu(params)
+  const data = await ADD_BARRAGE(params)
   if (data.code === 1) {
     // socketio增加实时弹幕api
     handleAddDanmu({

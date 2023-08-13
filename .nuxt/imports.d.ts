@@ -4,10 +4,11 @@ export { useAsyncData, useLazyAsyncData, refreshNuxtData, defineNuxtComponent, u
 export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId, onActivated, onBeforeMount, onBeforeUnmount, onBeforeUpdate, onDeactivated, onErrorCaptured, onMounted, onRenderTracked, onRenderTriggered, onServerPrefetch, onUnmounted, onUpdated, computed, customRef, isProxy, isReactive, isReadonly, isRef, markRaw, proxyRefs, reactive, readonly, ref, shallowReactive, shallowReadonly, shallowRef, toRaw, toRef, toRefs, triggerRef, unref, watch, watchEffect, isShallow, effect, effectScope, getCurrentScope, onScopeDispose, defineComponent, defineAsyncComponent, resolveComponent, getCurrentInstance, h, inject, nextTick, provide, useAttrs, useCssModule, useCssVars, useSlots, useTransitionState } from 'vue';
 export { baseUrl, useApi } from '../composables/api';
 export { useMaterials } from '../composables/materials';
-export { useUser } from '../composables/user';
-export { useVideo } from '../composables/video';
 export { useModel } from '../composables/model';
+export { useDanmuState } from '../composables/danmu';
 export { useSocket } from '../composables/socket';
+export { useVideo } from '../composables/video';
+export { useUser } from '../composables/user';
 export { usePinia } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';
 export { useLink } from 'vue-router';

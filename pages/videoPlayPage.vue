@@ -94,6 +94,12 @@ const navClick = (val: number) => {
   }
 }
 
+// 弹幕开关
+let { global } = $(useDanmuState())
+const switchDanmu = function () {
+  global = !global
+}
+
 // 发送弹幕
 let danmuContent = $ref('')
 function sendDanmuClick() {
@@ -144,7 +150,8 @@ useHead({ title: '小滴课堂 - 视频播放' })
           </ClientOnly>
         </div>
         <div mt-18px class="danmu">
-          <img class="cursor-pointer h-25px bg-none mr" :src="`/images/video_open.png`" />
+          <img class="cursor-pointer h-25px bg-none mr" :src="`/images/video_${global ? 'open' : 'close'}.png`"
+            @click="switchDanmu()" />
           <a-input mr-25px rounded-5px @keypress.enter.native="sendDanmuClick()" v-model:value="danmuContent"
             placeholder="请输入你要发送的弹幕" />
           <a-button @click="sendDanmuClick()">发送</a-button>

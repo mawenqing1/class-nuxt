@@ -20,11 +20,13 @@ const emit = defineEmits<{ (e: 'getVideoData', value: number): void }>()
 /**
  * 弹幕逻辑
  */
+let { global } = $(useDanmuState()) // 弹幕开关
 let danmakuRef = $ref<InstanceType<typeof vueDanmaku>>()
 let danmuTimer = $ref<NodeJS.Timer>()
 let oVideoPlayer: HTMLVideoElement
 let danmuList = $ref([])
 async function getDanmuData(push?: boolean) {
+  if (!global) return
   const currentTime = Math.floor(oVideoPlayer.currentTime)
   if (!push) {
     danmuList = (
@@ -50,7 +52,7 @@ async function getDanmuData(push?: boolean) {
 /**
  * 实例化播放器
  */
- let speed = false
+let speed = false
 let oVideo: HTMLVideoElement // 获取video DOM
 let oDanmu: HTMLDivElement // 获取弹幕 DOM
 let myPlay = $ref(null)
@@ -182,12 +184,16 @@ watch(
   () => videoDanmuList.length,
   () => {
     videoDanmuList.forEach((item) => {
-      console.log(item);
       danmakuRef.add(item)
     })
     videoDanmuList.length = 0
   }
 )
+
+// 监听弹幕开关变量控制显示隐藏
+watch(() => global, (val) => {
+  val ? danmakuRef.show() : danmakuRef.hide()
+})
 
 // 发送弹幕
 const sendDanmu = async function (danmuContent: string) {
@@ -256,22 +262,27 @@ defineExpose({ newPlayer, sendDanmu })
 }
 
 .COMMON_1 {
+  color: transparent;
   background-image: linear-gradient(90deg, #fdb34b 0%, #fbe36c 98.57142857142858%);
 }
 
 .COMMON_2 {
+  color: transparent;
   background-image: linear-gradient(90deg, #5094ea 0%, #5d41ba 45.34285714285714%, #c669a0 98.57142857142858%);
 }
 
 .COMMON_3 {
+  color: transparent;
   background-image: linear-gradient(90deg, #fdb34b 0%, #fbe36c 98.57142857142858%);
 }
 
 .COMMON_4 {
+  color: transparent;
   background-image: linear-gradient(90deg, #5094ea 0%, #5d41ba 45.34285714285714%, #c669a0 98.57142857142858%);
 }
 
 .COMMON_5 {
+  color: transparent;
   background-image: linear-gradient(90deg, #fe4d5f 0%, #ffc666 98.57142857142858%);
 }
 

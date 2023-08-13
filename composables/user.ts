@@ -53,7 +53,7 @@ export const useUser = defineStore(
       token.value = ''
       isLogin.value = false
       personalInfo.value = {} as any
-      // nextTick(() => navigateTo('/'))
+      nextTick(() => navigateTo('/'))
     }
     return {
       token,

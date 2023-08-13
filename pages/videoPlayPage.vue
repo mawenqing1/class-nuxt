@@ -44,7 +44,10 @@ const sectionClick = async (val: any) => {
 /**
  * 视频源
  */
-const xqclassPlayer = $ref<{ newPlayer: (playSrc: string) => void }>()
+const xqclassPlayer = $ref<{
+  newPlayer: (playSrc: string) => void
+  sendDanmu: (playSrc: string) => void
+}>()
 
 const getVideoData = async (id?: number) => {
   const res = await getVideo({ episodeId: id })
@@ -91,6 +94,13 @@ const navClick = (val: number) => {
   }
 }
 
+// 发送弹幕
+let danmuContent = $ref('')
+function sendDanmuClick() {
+  xqclassPlayer.sendDanmu(danmuContent)
+  danmuContent = ''
+}
+
 useHead({ title: '小滴课堂 - 视频播放' })
 </script>
 
@@ -115,8 +125,7 @@ useHead({ title: '小滴课堂 - 视频播放' })
               <div class="chapter-text" :title="item.title">第 {{ index + 1 }} 章&nbsp; {{ item.title }}</div>
               <div class="section">
                 <div class="section-item" v-for="(subItem, subIndex) in item.episodeList"
-                  :class="{ selected: subItem.id === _episodeId }" @click="sectionClick(subItem)"
-                  :title="subItem.title">
+                  :class="{ selected: subItem.id === _episodeId }" @click="sectionClick(subItem)" :title="subItem.title">
                   第 {{ subIndex + 1 }} 集 &nbsp;{{ subItem.title }}
                 </div>
               </div>
@@ -133,6 +142,12 @@ useHead({ title: '小滴课堂 - 视频播放' })
             <Player ref="xqclassPlayer" :episode-id="_episodeId" :product-id="realVideoId" :chapter-list="chapterList"
               @get-video-data="getVideoData" />
           </ClientOnly>
+        </div>
+        <div mt-18px class="danmu">
+          <img class="cursor-pointer h-25px bg-none mr" :src="`/images/video_open.png`" />
+          <a-input mr-25px rounded-5px @keypress.enter.native="sendDanmuClick()" v-model:value="danmuContent"
+            placeholder="请输入你要发送的弹幕" />
+          <a-button @click="sendDanmuClick()">发送</a-button>
         </div>
       </div>
     </div>

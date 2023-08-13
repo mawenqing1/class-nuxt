@@ -4,6 +4,10 @@ import 'video.js/dist/video-js.css'
 import { IChapter } from '~/types/api'
 import vueDanmaku from 'vue3-danmaku/dist/vue3-danmaku.esm'
 import { listByEpisodeId, addDanmu } from '~/api/bulletScreen'
+import { message } from 'ant-design-vue'
+
+const { personalInfo } = $(useUser())
+const { videoDanmuList, handleAddDanmu } = $(useSocket())
 
 const { productId, episodeId, chapterList } = defineProps<{
   productId: number
@@ -46,20 +50,30 @@ async function getDanmuData(push?: boolean) {
 /**
  * 实例化播放器
  */
+ let speed = false
 let oVideo: HTMLVideoElement // 获取video DOM
 let oDanmu: HTMLDivElement // 获取弹幕 DOM
 let myPlay = $ref(null)
 let init = $ref(false) // 控制弹幕展示时机
 let player: videojs.Player | null = null
-
+// 获取缓存中的播放速度，否则为1
+let playBackRate = $ref(process.client ? (localStorage.getItem('playBackRate') ? Number(localStorage.getItem('playBackRate')) : 1) : 1)
 
 let newPlayer = async (playSrc: string) => {
   if (process.server) return
   if (!player) {
+    await import('videojs-hotkeys')
     player = videojs(myPlay, {
       controls: true, // 控制器
       fill: true, // 填充模式
       playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2.0],
+      plugins: {
+        hotkeys: {
+          volumeStep: 0.1,
+          seekStep: 5,
+          enableModifiersForNumbers: false
+        }
+      }
     })
     init = true
 
@@ -74,7 +88,15 @@ let newPlayer = async (playSrc: string) => {
       oDanmu.style.height = `${oVideoPlayer.offsetHeight}px`
       danmakuRef.resize()
     })
+    // 改变播放速度
+    player.on('ratechange', () => {
+      if (speed) {
+        process.client && localStorage.setItem('playBackRate', player.playbackRate().toString())
+        playBackRate = player.playbackRate()
+      }
+    })
   }
+  speed = false
   player.src({
     src: playSrc,
     type: 'application/x-mpegURL' // 流设置: m3u8
@@ -116,6 +138,9 @@ const onPlayerReady = async function () {
   })
   // 视频自动播放
   player.play()
+  // 设置播放速度
+  player.playbackRate(playBackRate)
+  speed = true
 }
 
 // 当播放器手动选择进度
@@ -152,13 +177,51 @@ function nextEpisod() {
   })
 }
 
+// 监听videoDanmuList数据变化，增加弹幕
+watch(
+  () => videoDanmuList.length,
+  () => {
+    videoDanmuList.forEach((item) => {
+      console.log(item);
+      danmakuRef.add(item)
+    })
+    videoDanmuList.length = 0
+  }
+)
+
+// 发送弹幕
+const sendDanmu = async function (danmuContent: string) {
+  if (!danmuContent) {
+    message.warn('请输入弹幕')
+    return
+  }
+  const params = {
+    productId: productId,
+    episodeId: episodeId,
+    content: danmuContent,
+    playTime: oVideoPlayer.currentTime + Math.random() / 0.5
+  }
+  // 增加弹幕接口
+  const data = await addDanmu(params)
+  if (data.code === 1) {
+    // socketio增加实时弹幕api
+    handleAddDanmu({
+      content: danmuContent,
+      channel: 'video',
+      playTime: 0,
+      accountId: personalInfo.id,
+      head_img: personalInfo.head_img
+    })
+  }
+}
+
 // 组件即将销毁时删除播放器
 onBeforeUnmount(() => {
   if (player) player.dispose()
   if (danmuTimer) clearInterval(danmuTimer)
 })
 
-defineExpose({ newPlayer })
+defineExpose({ newPlayer, sendDanmu })
 </script>
 
 <template>
@@ -183,7 +246,7 @@ defineExpose({ newPlayer })
 .TEXT {
   font-size: 20px;
   font-weight: bold;
-  color: transparent;
+  color: #fff;
   background-clip: text;
 }
 

@@ -205,7 +205,7 @@ const sendDanmu = async function (danmuContent: string) {
     productId: productId,
     episodeId: episodeId,
     content: danmuContent,
-    playTime: oVideoPlayer.currentTime + Math.random() / 0.5
+    playTime: oVideoPlayer.currentTime + 1
   }
   // 增加弹幕接口
   const data = await ADD_BARRAGE(params)

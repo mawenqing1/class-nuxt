@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { GET_PLAY_RECORD } from '~~/api/account'
 import { IPage, IPlayRecord } from '~/types/api';
-import Avatar from './Personal/Avatar.vue'
-import PersonalSettings from './Personal/PersonalSettings.vue'
+import Avatar from './personal/Avatar.vue'
+import PersonalSettings from './personal/PersonalSettings.vue'
 
 const { personalInfo } = $(useUser())
 

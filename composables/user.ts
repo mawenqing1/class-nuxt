@@ -42,6 +42,7 @@ export const useUser = defineStore(
 
     // 退出登录
     const logout = () => {
+      navigateTo('/')
       clearInfo()
       message.success('退出登录成功！')
     }

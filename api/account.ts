@@ -36,3 +36,13 @@ export const getPlayRrecord = async function (params: {
         body: params,
     });
 };
+
+/**
+ * 修改个人信息
+ */
+export const updateUserInfo = async function (params: any) {
+    return await useApi<null>('/user/v1/update', {
+        method: 'POST',
+        body: params,
+    });
+};

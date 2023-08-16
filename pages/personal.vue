@@ -2,6 +2,7 @@
 import { getPlayRrecord } from '~~/api/account'
 import { IPage, IPlayRecord } from '~/types/api';
 import Avatar from './Personal/Avatar.vue'
+import PersonalSettings from './Personal/PersonalSettings.vue'
 
 const { personalInfo } = $(useUser())
 
@@ -64,6 +65,11 @@ const getProgress = function (item: IPlayRecord) {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div flex mt-15px>
+      <div w-full style="box-shadow: 0px 0px 10px 0px #d7d7d7" rounded-10px p3>
+        <PersonalSettings />
       </div>
     </div>
   </div>

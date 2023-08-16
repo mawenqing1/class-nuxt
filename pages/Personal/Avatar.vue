@@ -19,7 +19,7 @@ const handleChange = async (info: UploadChangeParam<UploadType>) => {
   if (info.file.status === 'done') {
     loading = false
 
-    if (info.file.response.code === 0) {
+    if (info.file.response.code === 1) {
       await asyncUserInfo()
       message.success('上传成功！')
     }

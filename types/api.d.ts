@@ -311,4 +311,25 @@ export interface IDanmu {
     gmt_create: string;
     gmt_modified: string;
     del: number;
-}  
+}
+
+export interface IPage<T> {
+    current_data: T[];
+    total_page: number;
+    total_record: number;
+}
+
+export interface IPlayRecord {
+    id: number;
+    product_id: number;
+    current_episode_id: number;
+    account_id: number;
+    learn_ids: string;
+    pay_status: string;
+    gmt_modified: string;
+    product_title: string;
+    cover_img: string;
+    episode_num: number;
+    product_type: string;
+    episode_title: string;
+}

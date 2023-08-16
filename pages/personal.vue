@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getPlayRrecord } from '~~/api/account'
+import { GET_PLAY_RECORD } from '~~/api/account'
 import { IPage, IPlayRecord } from '~/types/api';
 import Avatar from './Personal/Avatar.vue'
 import PersonalSettings from './Personal/PersonalSettings.vue'
@@ -15,7 +15,7 @@ useHead({
  */
 let data = ref<IPage<IPlayRecord>>()
 const getPlayRrecordData = async (page = 1) => {
-  const res = await getPlayRrecord({ page: page, size: 5 })
+  const res = await GET_PLAY_RECORD({ page: page, size: 5 })
   data.value = res.data
 }
 await getPlayRrecordData()

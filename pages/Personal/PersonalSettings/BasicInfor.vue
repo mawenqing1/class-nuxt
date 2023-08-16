@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { message } from 'ant-design-vue'
-import { updateUserInfo } from '~/api/account.js'
+import { UPDATE_USER_INFO } from '~/api/account.js'
 
 let { personalInfo, asyncUserInfo } = $(useUser())
 
@@ -18,7 +18,7 @@ const edit = () => {
  * 保存
  */
 const save = async () => {
-  const data = await updateUserInfo({ ...formData })
+  const data = await UPDATE_USER_INFO({ ...formData })
   if (data.code === 1) {
     disabled = !disabled
     await asyncUserInfo()

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { getPlayRrecord } from '~~/api/account'
+import { GET_PLAY_RECORD } from '~~/api/account'
 import RecentStudy from './RecentStudy.vue'
 
 const { personalInfo } = $(useUser())
-const res = (await getPlayRrecord({ page: 1, size: 4 })).data.current_data
+const res = (await GET_PLAY_RECORD({ page: 1, size: 4 })).data.current_data
 
 </script>
 

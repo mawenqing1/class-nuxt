@@ -5,7 +5,7 @@ import { IChapter } from '~/types/api'
 import vueDanmaku from 'vue3-danmaku/dist/vue3-danmaku.esm'
 import { LIST_BY_EPISODE_ID, ADD_BARRAGE } from '~/api/bulletScreen'
 import { message } from 'ant-design-vue'
-import { add } from '~/api/account'
+import { ADD_DURATION } from '~/api/account'
 
 const { personalInfo } = $(useUser())
 const { videoDanmuList, handleAddDanmu } = $(useSocket())
@@ -227,7 +227,7 @@ let timer = $ref<NodeJS.Timer>()
 onMounted(() => {
   timer = setInterval(() => {
     if (oVideoPlayer && !oVideoPlayer.paused) {
-      add({
+      ADD_DURATION({
         productId: productId,
         episodeId: episodeId,
         duration: Math.floor(oVideoPlayer.currentTime)

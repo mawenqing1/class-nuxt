@@ -5,6 +5,7 @@ import { IChapter } from '~/types/api'
 import vueDanmaku from 'vue3-danmaku/dist/vue3-danmaku.esm'
 import { LIST_BY_EPISODE_ID, ADD_BARRAGE } from '~/api/bulletScreen'
 import { message } from 'ant-design-vue'
+import { add } from '~/api/account'
 
 const { personalInfo } = $(useUser())
 const { videoDanmuList, handleAddDanmu } = $(useSocket())
@@ -221,10 +222,25 @@ const sendDanmu = async function (danmuContent: string) {
   }
 }
 
+// 上报学习时长
+let timer = $ref<NodeJS.Timer>()
+onMounted(() => {
+  timer = setInterval(() => {
+    if (oVideoPlayer && !oVideoPlayer.paused) {
+      add({
+        productId: productId,
+        episodeId: episodeId,
+        duration: Math.floor(oVideoPlayer.currentTime)
+      })
+    }
+  }, 10 * 1000)
+})
+
 // 组件即将销毁时删除播放器
 onBeforeUnmount(() => {
   if (player) player.dispose()
   if (danmuTimer) clearInterval(danmuTimer)
+  if (timer) clearInterval(timer)
 })
 
 defineExpose({ newPlayer, sendDanmu })

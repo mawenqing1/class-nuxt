@@ -14,7 +14,7 @@ export const useModel = defineStore("model", () => {
     const forgetModel = reactive({
         first: false,
         second: false,
-        phoneCache: '' 
+        phoneCache: ''
     });
 
     const wxModel = ref(false) //微信登录框
@@ -44,6 +44,11 @@ export const useModel = defineStore("model", () => {
         forgetModel.second = !forgetModel.second;
     };
 
+    // 打开登录弹窗
+    const changeToLogin = () => {
+        loginModel.value = true;
+    };
+
     return {
         registerModel,
         wxModel,
@@ -51,6 +56,7 @@ export const useModel = defineStore("model", () => {
         forgetModel,
         changeToFinish,
         changeToForget,
-        switchForget
+        switchForget,
+        changeToLogin
     }
 });

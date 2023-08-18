@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 #复制文件
 RUN mkdir /app
-ADD frontend-class/ /app
+ADD ./ /app
 WORKDIR /app
 
 # 安装

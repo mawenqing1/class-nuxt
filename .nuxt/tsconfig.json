@@ -49,6 +49,9 @@
       "public/*": [
         "public/*"
       ],
+      "dayjs": [
+        "dayjs/esm/"
+      ],
       "#app": [
         "node_modules/nuxt/dist/app"
       ],

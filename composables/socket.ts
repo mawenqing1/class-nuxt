@@ -11,7 +11,11 @@ export const useSocket = defineStore('socket', () => {
   let videoDanmuList = $ref([]);
   const initialize = () => {
     // 建立传输链接 http://127.0.0.1:8081
-    socket = io('ws://127.0.0.1:8081');
+    socket = io('wss://class-server.mawenqing.net', {
+      reconnectionDelay: 5000,
+      reconnectionDelayMax: 10000,
+      transports: ['websocket', 'polling']
+    });
     socket.on('connect', () => {
       console.log('socketio已连接');
     });

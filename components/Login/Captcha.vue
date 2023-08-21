@@ -19,7 +19,7 @@ const rules = {
   code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }]
 }
 
-const captchaSrc = ref(`http://127.0.0.1:8081/api/notify/v1/captcha?type=login&time=${Date.now()}`)
+const captchaSrc = ref(`${baseUrl}/notify/v1/captcha?type=login&time=${Date.now()}`)
 const countBtn = reactive({
   countDown: 60,
   disabled: false,

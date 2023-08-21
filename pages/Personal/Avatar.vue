@@ -60,7 +60,7 @@ const cursor = $computed(() => {
       <loading-outlined text-80px text-white />
     </div>
     <a-upload v-model:file-list="fileList" name="headImg" list-type="picture" :max-count="1" :show-upload-list="false"
-      :action="'http://127.0.0.1:8081/api/user/v1/update_img'" :before-upload="beforeUpload" @change="handleChange"
+      :action="`${baseUrl}/user/v1/update_img`" :before-upload="beforeUpload" @change="handleChange"
       :headers="{ authorization: `${token}` }" v-show="!loading">
       <div opacity-60 w-100px bg-black z-20 bottom-0 text-white text-btn center-text-30>修改头像</div>
     </a-upload>

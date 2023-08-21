@@ -6,7 +6,7 @@ import { USER_REGISTER } from '~/api/account'
 const { wxModel, changeToFinish } = $(useModel())
 const { registerForm } = defineProps<{ registerForm: { phone: string, code: string, captcha: string, accept: boolean } }>()
 
-const captchaSrc = ref(`http://127.0.0.1:8081/api/notify/v1/captcha?type=register&time=${Date.now()}`)
+const captchaSrc = ref(`${baseUrl}/notify/v1/captcha?type=register&time=${Date.now()}`)
 const countBtn = reactive({
   countDown: 60,
   disabled: false,

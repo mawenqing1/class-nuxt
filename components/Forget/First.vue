@@ -7,7 +7,7 @@ const currentInfo = reactive({
   phone: '',
   captcha: ''
 })
-const captchaSrc = ref(`http://127.0.0.1:8081/api/notify/v1/captcha?type=change&time=${Date.now()}`)
+const captchaSrc = ref(`${baseUrl}/notify/v1/captcha?type=change&time=${Date.now()}`)
 
 const rules = {
   phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],

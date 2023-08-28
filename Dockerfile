@@ -7,6 +7,7 @@ WORKDIR /app
 
 # 安装
 RUN npm set registry https://registry.npmmirror.com
+RUN yarn install
 RUN yarn build
 RUN npm i pm2 -g
 

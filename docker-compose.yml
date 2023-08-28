@@ -6,10 +6,3 @@ services:
     container_name: frontend-course
     ports:
       - 8080:3002
-  frontend-course-nginx:
-    image: frontend-course-nginx-image
-    restart: always
-    container_name: frontend-course-nginx
-    ports:
-      - 80:80
-      - 443:443

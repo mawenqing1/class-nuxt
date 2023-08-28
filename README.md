@@ -15,7 +15,7 @@ pnpm install
 
 # 启动开发服务器
 
-开发服务器默认启动在`http://localhost:3000`
+开发服务器默认启动在`http://localhost:3002`
 
 ```shell
 npm run dev

@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   experimental: {
     reactivityTransform: true,
   },
+  server: {
+    port: 3002,
+  },
   vite: {
     plugins: [
       Components({

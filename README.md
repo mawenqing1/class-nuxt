@@ -35,11 +35,12 @@ npm run preview
 ### docker部署  
 
 ```shell
-#删除上⼀次构建的镜像
-docker stop backend-course || true
-docker rm backend-course || true
-docker rmi backend-course-image || true
-#打包构建
-docker build -f Dockerfile . -t backend-course-image
+# 清理之前的docker镜像和容器
+docker stop frontend-course || true
+docker rm frontend-course || true
+docker rmi frontend-course-image || true
+# 打包构建
+docker build -f Dockerfile . -t frontend-course-image
+
 docker-compose -f docker-compose.yml up -d
 ```
